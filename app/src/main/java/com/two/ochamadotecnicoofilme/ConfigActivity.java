@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,13 +14,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
-public class MainActivity extends AppCompatActivity {
+public class ConfigActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_config);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -30,38 +29,32 @@ public class MainActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolBarTop);
         setSupportActionBar(toolbar);
 
-        Button btnConfig = findViewById(R.id.btnConfig);
-        btnConfig.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
-            startActivity(intent);
-        });
-
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_top, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.menu_config){
-            Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
-            startActivity(intent);
-            return true;
-        }
         if(item.getItemId() == R.id.menu_sobre){
-            Intent intent = new Intent(MainActivity.this, SobreActivity.class);
+            Intent intent = new Intent(ConfigActivity.this, SobreActivity.class);
             startActivity(intent);
             return true;
         }
         if(item.getItemId() == R.id.menu_cadastro){
-            Intent intent = new Intent(MainActivity.this, CadastroActivity.class);
+            Intent intent = new Intent(ConfigActivity.this, CadastroActivity.class);
             startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 }

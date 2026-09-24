@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,13 +17,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
-public class MainActivity extends AppCompatActivity {
+public class CadastroActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_cadastro);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -30,10 +32,23 @@ public class MainActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolBarTop);
         setSupportActionBar(toolbar);
 
-        Button btnConfig = findViewById(R.id.btnConfig);
-        btnConfig.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
-            startActivity(intent);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        EditText edtChamado = findViewById(R.id.edtChamado);
+        Button btnSalvar = findViewById(R.id.btnSalvar);
+
+
+        btnSalvar.setOnClickListener(v -> {
+            String chamado = edtChamado.getText().toString().trim();
+
+            if (chamado.isEmpty()) {
+                edtChamado.setError("Digite a descrição do chamado");
+
+                return;
+            }
+            Toast.makeText(CadastroActivity.this,"Chamado registrado", Toast.LENGTH_SHORT).show();
+            finish();
         });
 
     }
@@ -43,25 +58,24 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_top, menu);
         return true;
     }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.menu_config){
-            Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
+            Intent intent = new Intent(CadastroActivity.this, ConfigActivity.class);
             startActivity(intent);
             return true;
         }
         if(item.getItemId() == R.id.menu_sobre){
-            Intent intent = new Intent(MainActivity.this, SobreActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        if(item.getItemId() == R.id.menu_cadastro){
-            Intent intent = new Intent(MainActivity.this, CadastroActivity.class);
+            Intent intent = new Intent(CadastroActivity.this, SobreActivity.class);
             startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 }
